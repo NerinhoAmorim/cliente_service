@@ -7,24 +7,24 @@ import lombok.Value;
 
 @Value
 public class ClienteRequest {
-	
+
 	@NotBlank
-    private String nomeCompleto;
+	private String nomeCompleto;
 
-    @NotBlank
-    private String cpf;
+	@NotBlank
+	private String cpf;
 
-    @Email
-    @NotBlank
-    private String email;
+	@Email
+	@NotBlank
+	private String email;
 
-    @NotBlank
-    private String celular;
+	@NotBlank
+	private String celular;
 
-    @NotNull
-    private String dataNascimento;
+	@NotNull
+	private String dataNascimento;
 
-    @NotNull
-    private EnderecoRequest endereco;
+	@NotNull
+	private EnderecoRequest endereco;
 
 }

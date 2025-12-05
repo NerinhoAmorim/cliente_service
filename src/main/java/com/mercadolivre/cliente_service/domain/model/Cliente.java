@@ -3,6 +3,8 @@ package com.mercadolivre.cliente_service.domain.model;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.mercadolivre.cliente_service.application.api.ClienteRequest;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,20 +28,29 @@ public class Cliente {
 	@Id
 	@GeneratedValue
 	@Column(name = "id_cliente", columnDefinition = "uuid")
-    private UUID idCliente;
+	private UUID idCliente;
 
-    @Column(nullable = false, length = 150)
-    private String nome;
+	@Column(nullable = false, length = 150)
+	private String nomeCompleto;
 
-    @Column(nullable = false, unique = true, length = 11)
-    private String cpf;
+	@Column(nullable = false, unique = true, length = 11)
+	private String cpf;
 
-    @Column(nullable = false, length = 150)
-    private String email;
+	@Column(nullable = false, length = 150)
+	private String email;
 
-    private LocalDate dataNascimento;
+	private LocalDate dataNascimento;
 
-    @Column(length = 20)
-    private String telefone;
+	@Column(length = 20)
+	private String telefone;
+
+	private Endereco endereco;
+
+	public Cliente(ClienteRequest request) {
+		this.nomeCompleto = request.getNomeCompleto();
+		this.email = request.getEmail();
+		this.cpf = request.getCpf();
+		this.endereco = new Endereco(request.getEndereco());
 	}
 
+}

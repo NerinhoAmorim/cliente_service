@@ -4,26 +4,27 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 
+@Value
 public class EnderecoRequest {
-	
+
 	@NotBlank
-    private String rua;
+	private String rua;
 
-    @NotNull
-    private Integer numero;
+	@NotNull
+	private Integer numero;
 
-    private String complemento;
+	private String complemento;
 
-    @NotBlank
-    private String bairro;
+	@NotBlank
+	private String bairro;
 
-    @NotBlank
-    private String cidade;
+	@NotBlank
+	private String cidade;
 
-    @NotBlank
-    private String estado;
+	@NotBlank
+	private String estado;
 
-    @NotBlank
-    private String cep;
+	@NotBlank
+	private String cep;
 
 }

@@ -2,9 +2,9 @@ package com.mercadolivre.cliente_service.domain.model;
 
 import com.mercadolivre.cliente_service.application.api.EnderecoRequest;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,22 +14,35 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Endereco {
 
-	private String rua;
-	private String numero;
-	private String bairro;
-	private String cidade;
-	private String estado;
-	private String cep;
+    @Column(nullable = false)
+    private String rua;
 
-	public Endereco(EnderecoRequest endereco) {
-		this.rua = getRua();
-		this.numero = getNumero();
-		this.bairro = getBairro();
-		this.cidade = getCidade();
-		this.estado = getEstado();
-		this.cep = getCep();
-	}
+    @Column(nullable = false)
+    private Integer numero;
+
+    private String complemento;
+
+    @Column(nullable = false)
+    private String bairro;
+
+    @Column(nullable = false)
+    private String cidade;
+
+    @Column(nullable = false)
+    private String estado;
+
+    @Column(nullable = false)
+    private String cep;
+
+    public Endereco(EnderecoRequest request) {
+        this.rua = request.getRua();
+        this.numero = request.getNumero();
+        this.complemento = request.getComplemento();
+        this.bairro = request.getBairro();
+        this.cidade = request.getCidade();
+        this.estado = request.getEstado();
+        this.cep = request.getCep();
+    }
 }

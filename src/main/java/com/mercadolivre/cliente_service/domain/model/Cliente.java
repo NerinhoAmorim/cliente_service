@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.mercadolivre.cliente_service.application.api.ClienteRequest;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -30,7 +31,7 @@ public class Cliente {
 	@Column(name = "id_cliente", columnDefinition = "uuid")
 	private UUID idCliente;
 
-	@Column(nullable = false, length = 150)
+	@Column(name = "nome_completo", nullable = false, length = 150)
 	private String nomeCompleto;
 
 	@Column(nullable = false, unique = true, length = 11)
@@ -43,13 +44,15 @@ public class Cliente {
 
 	@Column(length = 20)
 	private String telefone;
-
+	@Embedded
 	private Endereco endereco;
 
 	public Cliente(ClienteRequest request) {
 		this.nomeCompleto = request.getNomeCompleto();
-		this.email = request.getEmail();
 		this.cpf = request.getCpf();
+		this.email = request.getEmail();
+		this.dataNascimento = LocalDate.parse(request.getDataNascimento());
+		this.telefone = request.getTelefone();
 		this.endereco = new Endereco(request.getEndereco());
 	}
 

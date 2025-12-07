@@ -1,11 +1,14 @@
 package com.mercadolivre.cliente_service.application.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.mercadolivre.cliente_service.application.api.ClienteListResponse;
 import com.mercadolivre.cliente_service.application.api.ClienteRequest;
 import com.mercadolivre.cliente_service.application.api.ClienteResponse;
 import com.mercadolivre.cliente_service.application.repository.ClienteRepository;
-import com.mercadolivre.cliente_service.domain.model.Cliente;
+import com.mercadolivre.cliente_service.domain.Cliente;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,12 +24,18 @@ public class ClienteApplicationService implements ClienteService {
 	@Override
 	public ClienteResponse criaCliente(ClienteRequest request) {
 		log.info("[start] ClienteApplicationService - criaCliente");
-
 		Cliente cliente = new Cliente(request);
 		clienteRepository.save(cliente);
-
 		log.info("[finish] ClienteApplicationService - criaCliente");
 		return new ClienteResponse(cliente);
+	}
+
+	@Override
+	public List<ClienteListResponse> getAllClientes() {
+		log.info("[inicia] ClienteApplicationService - getAllClientes");
+		List<Cliente> clientes = clienteRepository.getAllClientes();
+		log.info("[finaliza] ClienteApplicationService - getAllClientes");
+		return ClienteListResponse.converte(clientes);
 	}
 
 }

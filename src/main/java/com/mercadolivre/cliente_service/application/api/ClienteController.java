@@ -1,5 +1,7 @@
 package com.mercadolivre.cliente_service.application.api;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,9 +23,17 @@ public class ClienteController implements ClienteAPI {
 	@Override
 	public ClienteResponse postcliente(@Valid @RequestBody ClienteRequest request) {
 		log.info("[inicia] ClienteController - postCliente");
-		ClienteResponse response = clienteService.criaCliente(request);
+		ClienteResponse cliente = clienteService.criaCliente(request);
 		log.info("[finaliza] ClienteController - postCliente");
-		return response;
+		return cliente;
+	}
+
+	@Override
+	public List<ClienteListResponse> getAllClientes() {
+		log.info("[inicia] ClienteController - getAllClientes");
+		List<ClienteListResponse> clientes = clienteService.getAllClientes();
+		log.info("[finaliza] ClienteController - getAllClientes");
+		return clientes;
 	}
 
 }

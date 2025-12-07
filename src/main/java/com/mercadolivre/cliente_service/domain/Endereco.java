@@ -1,4 +1,4 @@
-package com.mercadolivre.cliente_service.domain.model;
+package com.mercadolivre.cliente_service.domain;
 
 import com.mercadolivre.cliente_service.application.api.EnderecoRequest;
 

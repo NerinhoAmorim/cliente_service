@@ -2,7 +2,7 @@ package com.mercadolivre.cliente_service.application.api;
 
 import java.util.UUID;
 
-import com.mercadolivre.cliente_service.domain.model.Cliente;
+import com.mercadolivre.cliente_service.domain.Cliente;
 
 import lombok.Value;
 

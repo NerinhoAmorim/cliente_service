@@ -1,11 +1,13 @@
 package com.mercadolivre.cliente_service.application.repository;
 
-import java.util.UUID;
+import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.mercadolivre.cliente_service.domain.Cliente;
 
-import com.mercadolivre.cliente_service.domain.model.Cliente;
+public interface ClienteRepository {
 
-public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
+	Cliente save(Cliente cliente);
+	List<Cliente> getAllClientes();
+
 
 }

@@ -1,6 +1,7 @@
 package com.mercadolivre.cliente_service.application.api;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,14 @@ public class ClienteController implements ClienteAPI {
 		List<ClienteListResponse> clientes = clienteService.getAllClientes();
 		log.info("[finaliza] ClienteController - getAllClientes");
 		return clientes;
+	}
+
+	@Override
+	public ClienteDetalhadoResponse getClientePorId(final UUID idCliente) {
+		log.info("[Inicia] ClienteController - getClientePorId | idCliente={}", idCliente);
+		ClienteDetalhadoResponse clienteDetalhado = clienteService.buscaClientePorId(idCliente);
+		log.info("[Finaliza] ClienteController - getClientePorId | idCliente={}", idCliente);
+		return clienteDetalhado;
 	}
 
 }

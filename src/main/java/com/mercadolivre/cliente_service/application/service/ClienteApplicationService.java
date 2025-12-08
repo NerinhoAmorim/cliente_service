@@ -1,9 +1,11 @@
 package com.mercadolivre.cliente_service.application.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.mercadolivre.cliente_service.application.api.ClienteDetalhadoResponse;
 import com.mercadolivre.cliente_service.application.api.ClienteListResponse;
 import com.mercadolivre.cliente_service.application.api.ClienteRequest;
 import com.mercadolivre.cliente_service.application.api.ClienteResponse;
@@ -36,6 +38,14 @@ public class ClienteApplicationService implements ClienteService {
 		List<Cliente> clientes = clienteRepository.getAllClientes();
 		log.info("[finaliza] ClienteApplicationService - getAllClientes");
 		return ClienteListResponse.converte(clientes);
+	}
+
+	@Override
+	public ClienteDetalhadoResponse buscaClientePorId(final UUID idCliente) {
+		log.info("[Inicia] ClienteApplicationService - buscaClientePorId | idCliente={}", idCliente);
+		Cliente cliente = clienteRepository.buscaClientePorId(idCliente);
+		log.info("[Finaliza] ClienteApplicationService - buscaClientePorId | idCliente={}", idCliente);
+		return new ClienteDetalhadoResponse(cliente);
 	}
 
 }

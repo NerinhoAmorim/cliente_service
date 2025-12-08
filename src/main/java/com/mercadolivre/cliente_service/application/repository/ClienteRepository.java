@@ -10,6 +10,7 @@ public interface ClienteRepository {
 	Cliente save(Cliente cliente);
 	List<Cliente> getAllClientes();
 	Cliente buscaClientePorId(UUID idCliente);
+	void deletaCliente(UUID idCliente);
 
 
 }

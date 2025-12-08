@@ -46,4 +46,12 @@ public class ClienteInfraRepository implements ClienteRepository {
 		return entity.toDomain();
 	}
 
+	@Override
+	public void deletaCliente(UUID idCliente) {
+	    log.info("[Inicia] ClienteInfraRepository - deletaCliente | idCliente={}", idCliente);
+	    clienteSpringDataJPARepository.deleteById(idCliente);
+	    log.info("[Finaliza] ClienteInfraRepository - deletaCliente | deletaCliente={}", idCliente);
+	}
+
+
 }

@@ -6,9 +6,11 @@ import java.util.stream.Collectors;
 
 import com.mercadolivre.cliente_service.domain.Cliente;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Value
+@Getter
+@AllArgsConstructor
 public class ClienteListResponse {
 	private UUID idCliente;
 	private String nomeCompleto;
@@ -16,7 +18,7 @@ public class ClienteListResponse {
 	private String telefone;
 	private String email;
 
-	private ClienteListResponse(Cliente cliente) {
+	public ClienteListResponse(Cliente cliente) {
 		this.idCliente = cliente.getIdCliente();
 		this.nomeCompleto = cliente.getNomeCompleto();
 		this.cpf = cliente.getCpf();

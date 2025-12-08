@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
+import com.mercadolivre.cliente_service.application.infra.entity.ClienteEntity;
 import com.mercadolivre.cliente_service.application.repository.ClienteRepository;
 import com.mercadolivre.cliente_service.domain.Cliente;
 import com.mercadolivre.cliente_service.handler.ApiException;
@@ -23,29 +24,26 @@ public class ClienteInfraRepository implements ClienteRepository {
 	@Override
 	public Cliente save(Cliente cliente) {
 		log.info("[Inicia] ClienteInfraRepository - save");
-		clienteSpringDataJPARepository.save(cliente);
+		ClienteEntity entity = new ClienteEntity(cliente);
+		ClienteEntity salvo = clienteSpringDataJPARepository.save(entity);
 		log.info("[Finaliza] ClienteInfraRepository - save");
-		return cliente;
-
+		return salvo.toDomain();
 	}
 
 	@Override
 	public List<Cliente> getAllClientes() {
 		log.info("[Inicia] ClienteInfraRepository - getAllClientes");
-		List<Cliente> todosClientes = clienteSpringDataJPARepository.findAll();
+		List<ClienteEntity> entities = clienteSpringDataJPARepository.findAll();
 		log.info("[Finaliza] ClienteInfraRepository - getAllClientes");
-		return todosClientes;
+		return entities.stream().map(ClienteEntity::toDomain).toList();
 	}
 
 	@Override
 	public Cliente buscaClientePorId(UUID idCliente) {
-	    log.debug("[Inicia] buscaClientePorId | id={}", idCliente);
-
-	    return clienteSpringDataJPARepository.findById(idCliente)
-	            .orElseThrow(() -> {
-	                log.warn("Cliente não encontrado | id={}", idCliente);
-	                return ApiException.build(HttpStatus.NOT_FOUND, "Cliente não encontrado!");
-	            });
+		log.info("[Inicia] buscaClientePorId | id={}", idCliente);
+		ClienteEntity entity = clienteSpringDataJPARepository.findById(idCliente)
+				.orElseThrow(() -> ApiException.build(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
+		return entity.toDomain();
 	}
 
 }

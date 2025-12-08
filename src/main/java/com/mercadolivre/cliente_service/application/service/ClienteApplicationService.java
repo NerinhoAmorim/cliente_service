@@ -25,12 +25,13 @@ public class ClienteApplicationService implements ClienteService {
 
 	@Override
 	public ClienteResponse criaCliente(ClienteRequest request) {
-		log.info("[start] ClienteApplicationService - criaCliente");
-		Cliente cliente = new Cliente(request);
-		clienteRepository.save(cliente);
-		log.info("[finish] ClienteApplicationService - criaCliente");
-		return new ClienteResponse(cliente);
+	    log.info("[start] ClienteApplicationService - criaCliente");
+	    Cliente cliente = new Cliente(request);
+	    Cliente clienteSalvo = clienteRepository.save(cliente);
+	    log.info("[finish] ClienteApplicationService - criaCliente");
+	    return new ClienteResponse(clienteSalvo);
 	}
+
 
 	@Override
 	public List<ClienteListResponse> getAllClientes() {
@@ -47,5 +48,7 @@ public class ClienteApplicationService implements ClienteService {
 		log.info("[Finaliza] ClienteApplicationService - buscaClientePorId | idCliente={}", idCliente);
 		return new ClienteDetalhadoResponse(cliente);
 	}
+
+
 
 }

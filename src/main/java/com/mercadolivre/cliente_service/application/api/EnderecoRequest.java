@@ -11,7 +11,7 @@ public class EnderecoRequest {
 	private String rua;
 
 	@NotNull
-	private Integer numero;
+	private String numero;
 
 	private String complemento;
 

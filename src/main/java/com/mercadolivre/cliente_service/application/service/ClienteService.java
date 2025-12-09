@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.mercadolivre.cliente_service.application.api.ClienteAlteracaoRequest;
 import com.mercadolivre.cliente_service.application.api.ClienteDetalhadoResponse;
 import com.mercadolivre.cliente_service.application.api.ClienteListResponse;
 import com.mercadolivre.cliente_service.application.api.ClienteRequest;
@@ -17,5 +18,6 @@ public interface ClienteService {
 	List<ClienteListResponse> getAllClientes();
 	ClienteDetalhadoResponse buscaClientePorId(UUID idCliente);
 	void deletaCliente(UUID idCliente);
+	void atualizaParcial(UUID idCliente, ClienteAlteracaoRequest request);
 
 }

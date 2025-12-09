@@ -44,6 +44,7 @@ public class ClienteEntity {
 
 	// Construtor de entidade via domínio
 	public ClienteEntity(Cliente cliente) {
+		this.idCliente = cliente.getIdCliente();
 		this.nomeCompleto = cliente.getNomeCompleto();
 		this.cpf = cliente.getCpf();
 		this.telefone = cliente.getTelefone();

@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.mercadolivre.cliente_service.application.api.ClienteAlteracaoRequest;
 import com.mercadolivre.cliente_service.application.api.ClienteDetalhadoResponse;
 import com.mercadolivre.cliente_service.application.api.ClienteListResponse;
 import com.mercadolivre.cliente_service.application.api.ClienteRequest;
@@ -25,13 +26,12 @@ public class ClienteApplicationService implements ClienteService {
 
 	@Override
 	public ClienteResponse criaCliente(ClienteRequest request) {
-	    log.info("[start] ClienteApplicationService - criaCliente");
-	    Cliente cliente = new Cliente(request);
-	    Cliente clienteSalvo = clienteRepository.save(cliente);
-	    log.info("[finish] ClienteApplicationService - criaCliente");
-	    return new ClienteResponse(clienteSalvo);
+		log.info("[start] ClienteApplicationService - criaCliente");
+		Cliente cliente = new Cliente(request);
+		Cliente clienteSalvo = clienteRepository.save(cliente);
+		log.info("[finish] ClienteApplicationService - criaCliente");
+		return new ClienteResponse(clienteSalvo);
 	}
-
 
 	@Override
 	public List<ClienteListResponse> getAllClientes() {
@@ -49,15 +49,29 @@ public class ClienteApplicationService implements ClienteService {
 		return new ClienteDetalhadoResponse(cliente);
 	}
 
-
 	@Override
 	public void deletaCliente(UUID idCliente) {
-	    log.info("[Inicia] ClienteApplicationService - deletaCliente | idCliente={}", idCliente);
-	    clienteRepository.buscaClientePorId(idCliente);
-	    clienteRepository.deletaCliente(idCliente);
-	    log.info("[Finaliza] ClienteApplicationService - deletaCliente | idCliente={}", idCliente);
+		log.info("[Inicia] ClienteApplicationService - deletaCliente | idCliente={}", idCliente);
+		clienteRepository.buscaClientePorId(idCliente);
+		clienteRepository.deletaCliente(idCliente);
+		log.info("[Finaliza] ClienteApplicationService - deletaCliente | idCliente={}", idCliente);
 	}
 
-
+	@Override
+	public void atualizaParcial(UUID idCliente, ClienteAlteracaoRequest request) {
+		log.info("[inicia] alteraCliente | id={}", idCliente);
+		Cliente cliente = clienteRepository.buscaClientePorId(idCliente);
+		if (request.getNomeCompleto() != null) {
+			cliente.setNomeCompleto(request.getNomeCompleto());
+		}
+		if (request.getEmail() != null) {
+			cliente.setEmail(request.getEmail());
+		}
+		if (request.getTelefone() != null) {
+			cliente.setTelefone(request.getTelefone());
+		}
+		clienteRepository.save(cliente);
+		log.info("[finaliza] alteraCliente | id={}", idCliente);
+	}
 
 }

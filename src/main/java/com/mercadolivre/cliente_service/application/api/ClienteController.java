@@ -52,4 +52,12 @@ public class ClienteController implements ClienteAPI {
 		log.info("[finaliza] ClienteController - deleteCliente | idCliente={}", idCliente);
 	}
 
+	@Override
+	public void alteraCliente(UUID idCliente, ClienteAlteracaoRequest request) {
+		log.info("[inicia] ClienteController - alteraCliente | id={}", idCliente);
+	    clienteService.atualizaParcial(idCliente, request);
+	    log.info("[finaliza] ClienteController - alteraCliente | id={}", idCliente);
+		
+	}
+
 }

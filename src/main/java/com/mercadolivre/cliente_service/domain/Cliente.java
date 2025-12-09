@@ -45,4 +45,33 @@ public class Cliente {
         this.telefone = request.getTelefone();
         this.endereco = new Endereco(request.getEndereco());
     }
+
+    public void setNomeCompleto(String nomeCompleto) {
+    	if (nomeCompleto == null || nomeCompleto.isBlank()) {
+    		throw new IllegalArgumentException("Nome completo não pode ser vazio.");
+    	}
+    	this.nomeCompleto = nomeCompleto.trim();
+    }
+    
+    public void setEmail(String email) {
+    	if (email == null || email.isBlank()) {
+    		throw new IllegalArgumentException("Email não pode ser vazio.");
+    	}
+    	if (!email.contains("@")) {
+    		throw new IllegalArgumentException("Email inválido.");
+    	}
+    	this.email = email.trim().toLowerCase();
+    }
+
+    public void setTelefone(String telefone) {
+    	if (telefone == null || telefone.isBlank()) {
+    		throw new IllegalArgumentException("Telefone não pode ser vazio.");
+    	}
+    	if (!telefone.matches("\\d{10,11}")) {
+    		throw new IllegalArgumentException("Telefone inválido. Use apenas números com DDD.");
+    	}
+    	this.telefone = telefone.trim();
+    }
+
+
 }

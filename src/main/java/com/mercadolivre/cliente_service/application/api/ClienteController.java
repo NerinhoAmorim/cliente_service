@@ -1,8 +1,8 @@
 package com.mercadolivre.cliente_service.application.api;
 
-import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,12 +30,11 @@ public class ClienteController implements ClienteAPI {
 	}
 
 	@Override
-	public List<ClienteListResponse> getAllClientes() {
-		log.info("[inicia] ClienteController - getAllClientes");
-		List<ClienteListResponse> clientes = clienteService.getAllClientes();
-		log.info("[finaliza] ClienteController - getAllClientes");
-		return clientes;
+	public PageResponse<ClienteListResponse> getAllClientes(Pageable pageable) {
+	    var page = clienteService.getAllClientes(pageable);
+	    return new PageResponse<>(page);
 	}
+
 
 	@Override
 	public ClienteDetalhadoResponse getClientePorId(final UUID idCliente) {
@@ -55,9 +54,9 @@ public class ClienteController implements ClienteAPI {
 	@Override
 	public void alteraCliente(UUID idCliente, ClienteAlteracaoRequest request) {
 		log.info("[inicia] ClienteController - alteraCliente | id={}", idCliente);
-	    clienteService.atualizaParcial(idCliente, request);
-	    log.info("[finaliza] ClienteController - alteraCliente | id={}", idCliente);
-		
+		clienteService.atualizaParcial(idCliente, request);
+		log.info("[finaliza] ClienteController - alteraCliente | id={}", idCliente);
+
 	}
 
 }

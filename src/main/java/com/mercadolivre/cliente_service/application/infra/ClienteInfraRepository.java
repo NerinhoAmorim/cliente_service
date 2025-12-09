@@ -1,8 +1,9 @@
 package com.mercadolivre.cliente_service.application.infra;
 
-import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
@@ -31,12 +32,17 @@ public class ClienteInfraRepository implements ClienteRepository {
 	}
 
 	@Override
-	public List<Cliente> getAllClientes() {
-		log.info("[Inicia] ClienteInfraRepository - getAllClientes");
-		List<ClienteEntity> entities = clienteSpringDataJPARepository.findAll();
-		log.info("[Finaliza] ClienteInfraRepository - getAllClientes");
-		return entities.stream().map(ClienteEntity::toDomain).toList();
+	public Page<Cliente> getAllClientes(Pageable pageable) {
+	    log.info("[Inicia] ClienteInfraRepository - getAllClientes | pageable={}", pageable);
+	    Page<ClienteEntity> pageEntity =
+	            clienteSpringDataJPARepository.findAll(pageable);
+	    Page<Cliente> pageDomain =
+	            pageEntity.map(ClienteEntity::toDomain);
+	    log.info("[Finaliza] ClienteInfraRepository - getAllClientes | total={}", 
+	             pageDomain.getTotalElements());
+	    return pageDomain;
 	}
+
 
 	@Override
 	public Cliente buscaClientePorId(UUID idCliente) {
@@ -48,10 +54,9 @@ public class ClienteInfraRepository implements ClienteRepository {
 
 	@Override
 	public void deletaCliente(UUID idCliente) {
-	    log.info("[Inicia] ClienteInfraRepository - deletaCliente | idCliente={}", idCliente);
-	    clienteSpringDataJPARepository.deleteById(idCliente);
-	    log.info("[Finaliza] ClienteInfraRepository - deletaCliente | deletaCliente={}", idCliente);
+		log.info("[Inicia] ClienteInfraRepository - deletaCliente | idCliente={}", idCliente);
+		clienteSpringDataJPARepository.deleteById(idCliente);
+		log.info("[Finaliza] ClienteInfraRepository - deletaCliente | deletaCliente={}", idCliente);
 	}
-
 
 }

@@ -1,8 +1,9 @@
 package com.mercadolivre.cliente_service.application.service;
 
-import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.mercadolivre.cliente_service.application.api.ClienteAlteracaoRequest;
@@ -34,11 +35,13 @@ public class ClienteApplicationService implements ClienteService {
 	}
 
 	@Override
-	public List<ClienteListResponse> getAllClientes() {
-		log.info("[inicia] ClienteApplicationService - getAllClientes");
-		List<Cliente> clientes = clienteRepository.getAllClientes();
-		log.info("[finaliza] ClienteApplicationService - getAllClientes");
-		return ClienteListResponse.converte(clientes);
+	public Page<ClienteListResponse> getAllClientes(Pageable pageable) {
+	    log.info("[Inicia] ClienteApplicationService - getAllClientes | pageable={}", pageable);
+	    Page<Cliente> pageDomain = clienteRepository.getAllClientes(pageable);
+	    Page<ClienteListResponse> pageDto =
+	            pageDomain.map(ClienteListResponse::fromDomain);
+	    log.info("[Finaliza] ClienteApplicationService - getAllClientes| total={}", pageDto.getTotalElements());
+	    return pageDto;
 	}
 
 	@Override

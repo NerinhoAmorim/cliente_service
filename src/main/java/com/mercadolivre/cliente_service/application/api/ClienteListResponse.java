@@ -31,5 +31,9 @@ public class ClienteListResponse {
 				.map(ClienteListResponse ::new)
 				.collect(Collectors.toList());
 	}
+	public static ClienteListResponse fromDomain(Cliente cliente) {
+	    return new ClienteListResponse(cliente);
+	}
+
 
 }

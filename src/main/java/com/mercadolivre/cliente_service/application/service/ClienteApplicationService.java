@@ -1,4 +1,4 @@
-package com.mercadolivre.cliente_service.application.service;
+	package com.mercadolivre.cliente_service.application.service;
 
 import java.util.UUID;
 
@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.mercadolivre.cliente_service.application.api.ClienteAlteracaoRequest;
 import com.mercadolivre.cliente_service.application.api.ClienteDetalhadoResponse;
-import com.mercadolivre.cliente_service.application.api.ClienteListResponse;
+import com.mercadolivre.cliente_service.application.api.ClienteFiltroPageResponse;
+import com.mercadolivre.cliente_service.application.api.ClienteFiltroResponse;
 import com.mercadolivre.cliente_service.application.api.ClienteRequest;
 import com.mercadolivre.cliente_service.application.api.ClienteResponse;
-import com.mercadolivre.cliente_service.application.api.PageResponse;
 import com.mercadolivre.cliente_service.application.repository.ClienteRepository;
 import com.mercadolivre.cliente_service.domain.Cliente;
 
@@ -82,19 +82,17 @@ public class ClienteApplicationService implements ClienteService {
 
 
 	@Override
-	public PageResponse<ClienteListResponse> getAllClientes(
+	public ClienteFiltroPageResponse getAllClientes(
 	        String nome,
 	        String email,
 	        String cpf,
 	        String telefone,
-	        Pageable pageable) {
-
-	    Page<Cliente> pageDomain =
-	            clienteRepository.findByFilters(nome, email, cpf, telefone, pageable);
-	    Page<ClienteListResponse> pageDto =
-	            pageDomain.map(ClienteListResponse::fromDomain);
-	    return new PageResponse<>(pageDto);
+	        Pageable pageable
+	) {
+	    Page<ClienteFiltroResponse> page = clienteRepository.findByFiltros(nome, email, cpf, telefone, pageable);
+	    return ClienteFiltroPageResponse.from(page);
 	}
+
 
 
 

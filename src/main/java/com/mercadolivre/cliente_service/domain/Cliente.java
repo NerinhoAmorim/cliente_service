@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import com.mercadolivre.cliente_service.application.api.ClienteRequest;
+
 import lombok.Getter;
 
 @Getter
@@ -41,7 +42,7 @@ public class Cliente {
         this.nomeCompleto = request.getNomeCompleto();
         this.cpf = request.getCpf();
         this.email = request.getEmail();
-        this.dataNascimento = LocalDate.parse(request.getDataNascimento());
+        this.dataNascimento = request.getDataNascimento();
         this.telefone = request.getTelefone();
         this.endereco = new Endereco(request.getEndereco());
     }

@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mercadolivre.cliente_service.application.service.ClienteService;
@@ -30,11 +31,11 @@ public class ClienteController implements ClienteAPI {
 	}
 
 	@Override
-	public PageResponse<ClienteListResponse> getAllClientes(Pageable pageable) {
-	    var page = clienteService.getAllClientes(pageable);
-	    return new PageResponse<>(page);
+	public PageResponse<ClienteListResponse> getAllClientes(@RequestParam(required = false) String nome,
+			@RequestParam(required = false) String email, @RequestParam(required = false) String cpf,
+			@RequestParam(required = false) String telefone, Pageable pageable) {
+		return clienteService.getAllClientes(nome, email, cpf, telefone, pageable);
 	}
-
 
 	@Override
 	public ClienteDetalhadoResponse getClientePorId(final UUID idCliente) {

@@ -10,7 +10,14 @@ import com.mercadolivre.cliente_service.domain.Cliente;
 public interface ClienteRepository {
 
     Cliente save(Cliente cliente);
-    Page<Cliente> getAllClientes(Pageable pageable);
     Cliente buscaClientePorId(UUID idCliente);
     void deletaCliente(UUID idCliente);
+
+    Page<Cliente> findByFilters(
+            String nome,
+            String email,
+            String cpf,
+            String telefone,
+            Pageable pageable
+    );
 }

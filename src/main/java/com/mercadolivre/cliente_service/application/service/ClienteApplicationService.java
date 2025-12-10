@@ -92,6 +92,9 @@ public class ClienteApplicationService implements ClienteService {
 	    Page<ClienteFiltroResponse> page = clienteRepository.findByFiltros(nome, email, cpf, telefone, pageable);
 	    return ClienteFiltroPageResponse.from(page);
 	}
+	
+	
+
 
 
 

@@ -1,9 +1,12 @@
 package com.mercadolivre.cliente_service.application.api;
 
 public record ClienteFiltroRequest(
-        String nome,
+        String nomeCompleto,
         String cpf,
         String email,
         String cidade,
-        String estado
-) {}
+        String estado,
+        String telefone
+) {
+
+	}

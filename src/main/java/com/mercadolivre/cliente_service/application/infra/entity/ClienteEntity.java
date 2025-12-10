@@ -58,4 +58,14 @@ public class ClienteEntity {
 		return new Cliente(this.idCliente, this.nomeCompleto, this.cpf, this.email, this.dataNascimento, this.telefone,
 				this.endereco);
 	}
+	
+	public void updateFromDomain(Cliente cliente) {
+	    this.nomeCompleto = cliente.getNomeCompleto();
+	    this.cpf = cliente.getCpf();
+		this.telefone = cliente.getTelefone();
+		this.email = cliente.getEmail();
+		this.dataNascimento = cliente.getDataNascimento();
+	    this.endereco = cliente.getEndereco();
+	}
+
 }

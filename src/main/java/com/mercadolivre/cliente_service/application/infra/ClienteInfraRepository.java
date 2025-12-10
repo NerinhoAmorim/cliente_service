@@ -4,10 +4,12 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import com.mercadolivre.cliente_service.application.infra.entity.ClienteEntity;
+import com.mercadolivre.cliente_service.application.infra.specs.ClienteSpecification;
 import com.mercadolivre.cliente_service.application.repository.ClienteRepository;
 import com.mercadolivre.cliente_service.domain.Cliente;
 import com.mercadolivre.cliente_service.handler.ApiException;
@@ -20,29 +22,38 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ClienteInfraRepository implements ClienteRepository {
 
-	private final CienteSpringDataJPARepository clienteSpringDataJPARepository;
+	private final ClienteSpringDataJPARepository clienteSpringDataJPARepository;
 
 	@Override
 	public Cliente save(Cliente cliente) {
-		log.info("[Inicia] ClienteInfraRepository - save");
-		ClienteEntity entity = new ClienteEntity(cliente);
-		ClienteEntity salvo = clienteSpringDataJPARepository.save(entity);
-		log.info("[Finaliza] ClienteInfraRepository - save");
-		return salvo.toDomain();
-	}
+		log.info("[Inicial] ClienteInfraRepository - save");
 
+		ClienteEntity entity = cliente.getIdCliente() != null
+				? clienteSpringDataJPARepository.findById(cliente.getIdCliente()).map(e -> {
+					e.updateFromDomain(cliente);
+					return e;
+				}).orElse(new ClienteEntity(cliente))
+				: new ClienteEntity(cliente);
+		ClienteEntity saved = clienteSpringDataJPARepository.save(entity);
+		return saved.toDomain();
+	}
+	
 	@Override
-	public Page<Cliente> getAllClientes(Pageable pageable) {
-	    log.info("[Inicia] ClienteInfraRepository - getAllClientes | pageable={}", pageable);
-	    Page<ClienteEntity> pageEntity =
-	            clienteSpringDataJPARepository.findAll(pageable);
-	    Page<Cliente> pageDomain =
-	            pageEntity.map(ClienteEntity::toDomain);
-	    log.info("[Finaliza] ClienteInfraRepository - getAllClientes | total={}", 
-	             pageDomain.getTotalElements());
-	    return pageDomain;
+	public Page<Cliente> findByFilters(
+			String nome,
+			String email,
+			String cpf,
+			String telefone,
+			Pageable pageable) {
+		
+		Specification<ClienteEntity> spec =
+				ClienteSpecification.build(nome, email, cpf, telefone);
+		Page<ClienteEntity> pageEntity =
+				clienteSpringDataJPARepository.findAll(spec, pageable);
+		return pageEntity.map(ClienteEntity::toDomain);
 	}
 
+	
 
 	@Override
 	public Cliente buscaClientePorId(UUID idCliente) {
@@ -58,5 +69,6 @@ public class ClienteInfraRepository implements ClienteRepository {
 		clienteSpringDataJPARepository.deleteById(idCliente);
 		log.info("[Finaliza] ClienteInfraRepository - deletaCliente | deletaCliente={}", idCliente);
 	}
+
 
 }

@@ -11,6 +11,7 @@ import com.mercadolivre.cliente_service.application.api.ClienteDetalhadoResponse
 import com.mercadolivre.cliente_service.application.api.ClienteListResponse;
 import com.mercadolivre.cliente_service.application.api.ClienteRequest;
 import com.mercadolivre.cliente_service.application.api.ClienteResponse;
+import com.mercadolivre.cliente_service.application.api.PageResponse;
 import com.mercadolivre.cliente_service.application.repository.ClienteRepository;
 import com.mercadolivre.cliente_service.domain.Cliente;
 
@@ -27,22 +28,23 @@ public class ClienteApplicationService implements ClienteService {
 
 	@Override
 	public ClienteResponse criaCliente(ClienteRequest request) {
-		log.info("[start] ClienteApplicationService - criaCliente");
-		Cliente cliente = new Cliente(request);
-		Cliente clienteSalvo = clienteRepository.save(cliente);
-		log.info("[finish] ClienteApplicationService - criaCliente");
-		return new ClienteResponse(clienteSalvo);
+	    log.info("[start] ClienteApplicationService - criaCliente");
+
+	    if (request.getCpf() == null || request.getCpf().isBlank()) {
+	        throw new IllegalArgumentException("CPF não pode ser vazio");
+	    }
+	    if (request.getEmail() == null || request.getEmail().isBlank()) {
+	        throw new IllegalArgumentException("E-mail não pode ser vazio");
+	    }
+
+	    Cliente cliente = new Cliente(request);
+	    Cliente clienteSalvo = clienteRepository.save(cliente);
+
+	    log.info("[finish] ClienteApplicationService - criaCliente | id={}", clienteSalvo.getIdCliente());
+	    return new ClienteResponse(clienteSalvo);
 	}
 
-	@Override
-	public Page<ClienteListResponse> getAllClientes(Pageable pageable) {
-	    log.info("[Inicia] ClienteApplicationService - getAllClientes | pageable={}", pageable);
-	    Page<Cliente> pageDomain = clienteRepository.getAllClientes(pageable);
-	    Page<ClienteListResponse> pageDto =
-	            pageDomain.map(ClienteListResponse::fromDomain);
-	    log.info("[Finaliza] ClienteApplicationService - getAllClientes| total={}", pageDto.getTotalElements());
-	    return pageDto;
-	}
+
 
 	@Override
 	public ClienteDetalhadoResponse buscaClientePorId(final UUID idCliente) {
@@ -62,19 +64,38 @@ public class ClienteApplicationService implements ClienteService {
 
 	@Override
 	public void atualizaParcial(UUID idCliente, ClienteAlteracaoRequest request) {
-		log.info("[inicia] alteraCliente | id={}", idCliente);
-		Cliente cliente = clienteRepository.buscaClientePorId(idCliente);
-		if (request.getNomeCompleto() != null) {
-			cliente.setNomeCompleto(request.getNomeCompleto());
-		}
-		if (request.getEmail() != null) {
-			cliente.setEmail(request.getEmail());
-		}
-		if (request.getTelefone() != null) {
-			cliente.setTelefone(request.getTelefone());
-		}
-		clienteRepository.save(cliente);
-		log.info("[finaliza] alteraCliente | id={}", idCliente);
+	    log.info("[start] ClienteApplicationService - atualizaParcial | id={}", idCliente);
+	    Cliente cliente = clienteRepository.buscaClientePorId(idCliente);
+	    if (request.getNomeCompleto() != null && !request.getNomeCompleto().isBlank()) {
+	        cliente.setNomeCompleto(request.getNomeCompleto());
+	    }
+	    if (request.getEmail() != null && !request.getEmail().isBlank()) {
+	        cliente.setEmail(request.getEmail());
+	    }
+	    if (request.getTelefone() != null && !request.getTelefone().isBlank()) {
+	        cliente.setTelefone(request.getTelefone());
+	    }
+	    clienteRepository.save(cliente);
+	    log.info("[finish] ClienteApplicationService - atualizaParcial | id={}", idCliente);
 	}
+
+
+
+	@Override
+	public PageResponse<ClienteListResponse> getAllClientes(
+	        String nome,
+	        String email,
+	        String cpf,
+	        String telefone,
+	        Pageable pageable) {
+
+	    Page<Cliente> pageDomain =
+	            clienteRepository.findByFilters(nome, email, cpf, telefone, pageable);
+	    Page<ClienteListResponse> pageDto =
+	            pageDomain.map(ClienteListResponse::fromDomain);
+	    return new PageResponse<>(pageDto);
+	}
+
+
 
 }

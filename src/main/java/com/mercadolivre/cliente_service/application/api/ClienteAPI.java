@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import jakarta.validation.Valid;
@@ -18,25 +19,32 @@ import jakarta.validation.Valid;
 @RequestMapping("/v1/cliente")
 public interface ClienteAPI {
 
-	@PostMapping
-	@ResponseStatus(code = HttpStatus.CREATED)
-	ClienteResponse postcliente(@Valid @RequestBody ClienteRequest request);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    ClienteResponse postcliente(@Valid @RequestBody ClienteRequest request);
 
-	@GetMapping
-	@ResponseStatus(code = HttpStatus.OK)
-	PageResponse<ClienteListResponse> getAllClientes(String nome, String email, String cpf, String telefone,
-			Pageable pageable);
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    ClienteFiltroPageResponse getAllClientes(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String cpf,
+            @RequestParam(required = false) String telefone,
+            Pageable pageable
+    );
 
-	@GetMapping("/{idCliente}")
-	@ResponseStatus(code = HttpStatus.OK)
-	ClienteDetalhadoResponse getClientePorId(@PathVariable UUID idCliente);
+    @GetMapping("/{idCliente}")
+    @ResponseStatus(HttpStatus.OK)
+    ClienteDetalhadoResponse getClientePorId(@PathVariable UUID idCliente);
 
-	@DeleteMapping("/{idCliente}")
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	void deleteCliente(@PathVariable UUID idCliente);
+    @DeleteMapping("/{idCliente}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteCliente(@PathVariable UUID idCliente);
 
-	@PatchMapping("/{idCliente}")
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	void alteraCliente(@PathVariable UUID idCliente, @RequestBody ClienteAlteracaoRequest request);
-
+    @PatchMapping("/{idCliente}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void alteraCliente(
+            @PathVariable UUID idCliente,
+            @Valid @RequestBody ClienteAlteracaoRequest request
+    );
 }

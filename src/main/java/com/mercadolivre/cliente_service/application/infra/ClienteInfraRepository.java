@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
+import com.mercadolivre.cliente_service.application.api.ClienteFiltroResponse;
 import com.mercadolivre.cliente_service.application.infra.entity.ClienteEntity;
 import com.mercadolivre.cliente_service.application.infra.specs.ClienteSpecification;
 import com.mercadolivre.cliente_service.application.repository.ClienteRepository;
@@ -39,7 +40,7 @@ public class ClienteInfraRepository implements ClienteRepository {
 	}
 	
 	@Override
-	public Page<Cliente> findByFilters(
+	public Page<ClienteFiltroResponse> findByFiltros(
 			String nome,
 			String email,
 			String cpf,
@@ -48,9 +49,17 @@ public class ClienteInfraRepository implements ClienteRepository {
 		
 		Specification<ClienteEntity> spec =
 				ClienteSpecification.build(nome, email, cpf, telefone);
-		Page<ClienteEntity> pageEntity =
-				clienteSpringDataJPARepository.findAll(spec, pageable);
-		return pageEntity.map(ClienteEntity::toDomain);
+		Page<ClienteEntity> page = clienteSpringDataJPARepository.findAll(spec, pageable);
+		return page.map(entity -> new ClienteFiltroResponse(
+		        entity.getIdCliente(),
+		        entity.getNomeCompleto(),
+		        entity.getCpf(),
+		        entity.getEmail(),
+		        entity.getTelefone(),
+		        entity.getEndereco().getCidade(),
+		        entity.getEndereco().getEstado()
+		));
+
 	}
 
 	

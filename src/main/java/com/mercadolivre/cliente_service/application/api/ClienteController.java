@@ -3,6 +3,7 @@ package com.mercadolivre.cliente_service.application.api;
 import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,33 +32,41 @@ public class ClienteController implements ClienteAPI {
 	}
 
 	@Override
-	public PageResponse<ClienteListResponse> getAllClientes(@RequestParam(required = false) String nome,
-			@RequestParam(required = false) String email, @RequestParam(required = false) String cpf,
-			@RequestParam(required = false) String telefone, Pageable pageable) {
+	public ClienteFiltroPageResponse getAllClientes(
+			@RequestParam(required = false) String nome,
+			@RequestParam(required = false) String email,
+			@RequestParam(required = false) String cpf,
+			@RequestParam(required = false) String telefone,
+			Pageable pageable) {
 		return clienteService.getAllClientes(nome, email, cpf, telefone, pageable);
 	}
 
 	@Override
-	public ClienteDetalhadoResponse getClientePorId(final UUID idCliente) {
-		log.info("[Inicia] ClienteController - getClientePorId | idCliente={}", idCliente);
-		ClienteDetalhadoResponse clienteDetalhado = clienteService.buscaClientePorId(idCliente);
-		log.info("[Finaliza] ClienteController - getClientePorId | idCliente={}", idCliente);
-		return clienteDetalhado;
+	public ClienteDetalhadoResponse getClientePorId(@PathVariable UUID idCliente) {
+	    log.info("[Inicia] ClienteController - getClientePorId | idCliente={}", idCliente);
+	    ClienteDetalhadoResponse clienteDetalhado = clienteService.buscaClientePorId(idCliente);
+	    log.info("[Finaliza] ClienteController - getClientePorId | idCliente={}", idCliente);
+	    return clienteDetalhado;
 	}
+
 
 	@Override
-	public void deleteCliente(UUID idCliente) {
-		log.info("[inicia] ClienteController - deleteCliente | idCliente={}", idCliente);
-		clienteService.deletaCliente(idCliente);
-		log.info("[finaliza] ClienteController - deleteCliente | idCliente={}", idCliente);
+	public void deleteCliente(@PathVariable UUID idCliente) {
+	    log.info("[inicia] ClienteController - deleteCliente | idCliente={}", idCliente);
+	    clienteService.deletaCliente(idCliente);
+	    log.info("[finaliza] ClienteController - deleteCliente | idCliente={}", idCliente);
 	}
+
 
 	@Override
-	public void alteraCliente(UUID idCliente, ClienteAlteracaoRequest request) {
-		log.info("[inicia] ClienteController - alteraCliente | id={}", idCliente);
-		clienteService.atualizaParcial(idCliente, request);
-		log.info("[finaliza] ClienteController - alteraCliente | id={}", idCliente);
-
+	public void alteraCliente(
+	        @PathVariable UUID idCliente,
+	        @Valid @RequestBody ClienteAlteracaoRequest request
+	) {
+	    log.info("[inicia] ClienteController - alteraCliente | id={}", idCliente);
+	    clienteService.atualizaParcial(idCliente, request);
+	    log.info("[finaliza] ClienteController - alteraCliente | id={}", idCliente);
 	}
+
 
 }

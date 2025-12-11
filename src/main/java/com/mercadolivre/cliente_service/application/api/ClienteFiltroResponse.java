@@ -23,6 +23,10 @@ public record ClienteFiltroResponse(
                 cliente.getEndereco().getEstado()
         );
     }
+ // alias compacto para map(ClienteFiltroResponse::from)
+    public static ClienteFiltroResponse from(Cliente cliente) {
+        return fromDomain(cliente);
+    }
     
     
 }

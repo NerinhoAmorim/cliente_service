@@ -89,7 +89,15 @@ public class ClienteApplicationService implements ClienteService {
 	        String telefone,
 	        Pageable pageable
 	) {
-	    Page<ClienteFiltroResponse> page = clienteRepository.findByFiltros(nome, email, cpf, telefone, pageable);
+	    log.info("[start] ClienteApplicationService - getAllClientes");
+	    Page<ClienteFiltroResponse> page = clienteRepository.findByFiltros(
+	    		nome,
+	    		email, 
+	    		cpf,
+	    		telefone, 
+	    		pageable
+	    		);
+	    log.info("[Finish] ClienteApplicationService - getAllClientes");
 	    return ClienteFiltroPageResponse.from(page);
 	}
 	

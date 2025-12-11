@@ -32,16 +32,15 @@ public class ClienteInfraRepository implements ClienteRepository {
 
     @Override
     public Cliente save(Cliente cliente) {
-        log.info("[Inicial] ClienteInfraRepository - save");
-
+        log.info("[Inicia] ClienteInfraRepository - save");
         ClienteEntity entity = cliente.getIdCliente() != null
                 ? clienteSpringDataJPARepository.findById(cliente.getIdCliente()).map(e -> {
                     e.updateFromDomain(cliente);
                     return e;
                 }).orElse(new ClienteEntity(cliente))
                 : new ClienteEntity(cliente);
-
         ClienteEntity saved = clienteSpringDataJPARepository.save(entity);
+        log.info("[Finaliza] ClienteInfraRepository - save");
         return saved.toDomain();
     }
 
@@ -52,12 +51,11 @@ public class ClienteInfraRepository implements ClienteRepository {
             String cpf,
             String telefone,
             Pageable pageable) {
-
+        log.info("[Inicia] buscaClientePorId - findByFiltros");
         Specification<ClienteEntity> spec =
                 ClienteSpecification.build(nome, email, cpf, telefone);
-
         Page<ClienteEntity> page = clienteSpringDataJPARepository.findAll(spec, pageable);
-
+        log.info("[Finaliza] buscaClientePorId - findByFiltros");
         return page.map(entity -> new ClienteFiltroResponse(
                 entity.getIdCliente(),
                 entity.getNomeCompleto(),
@@ -74,6 +72,7 @@ public class ClienteInfraRepository implements ClienteRepository {
         log.info("[Inicia] buscaClientePorId | id={}", idCliente);
         ClienteEntity entity = clienteSpringDataJPARepository.findById(idCliente)
                 .orElseThrow(() -> ApiException.build(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
+        log.info("[Finaliza] buscaClientePorId | id={}", idCliente);
         return entity.toDomain();
     }
 

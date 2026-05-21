@@ -76,7 +76,7 @@ public class ClienteApplicationService implements ClienteService {
             throw e;
         } catch (Exception e) {
             throw ApiException.build(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Erro ao deletar cliente.", e);
+	                    "Erro ao buscar cliente.", e);
         }
 	}
 
@@ -103,6 +103,11 @@ public class ClienteApplicationService implements ClienteService {
 	public void atualizaParcial(UUID idCliente, ClienteAlteracaoRequest request) {
 	    log.info("[start] ClienteApplicationService - atualizaParcial | id={}", idCliente);
 	    try {
+            if (isRequestVazia(request)) {
+                throw ApiException.build(HttpStatus.BAD_REQUEST,
+                        "Informe ao menos um campo para atualizacao.");
+            }
+
             Cliente cliente = clienteRepository.findById(idCliente)
                     .orElseThrow(() -> ApiException.build(
                             HttpStatus.NOT_FOUND,
@@ -145,6 +150,29 @@ public class ClienteApplicationService implements ClienteService {
                     "Erro ao atualizar cliente.", e);
         }
 	    
+	}
+
+	private boolean isRequestVazia(ClienteAlteracaoRequest request) {
+		if (request == null) {
+			return true;
+		}
+
+		boolean semCamposCliente = (request.getNomeCompleto() == null || request.getNomeCompleto().isBlank())
+				&& (request.getEmail() == null || request.getEmail().isBlank())
+				&& (request.getTelefone() == null || request.getTelefone().isBlank());
+
+		if (request.getEndereco() == null) {
+			return semCamposCliente;
+		}
+
+		boolean semCamposEndereco = (request.getEndereco().getRua() == null || request.getEndereco().getRua().isBlank())
+				&& (request.getEndereco().getNumero() == null || request.getEndereco().getNumero().isBlank())
+				&& (request.getEndereco().getBairro() == null || request.getEndereco().getBairro().isBlank())
+				&& (request.getEndereco().getCidade() == null || request.getEndereco().getCidade().isBlank())
+				&& (request.getEndereco().getEstado() == null || request.getEndereco().getEstado().isBlank())
+				&& (request.getEndereco().getCep() == null || request.getEndereco().getCep().isBlank());
+
+		return semCamposCliente && semCamposEndereco;
 	}
 
 

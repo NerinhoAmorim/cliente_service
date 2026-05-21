@@ -4,6 +4,8 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.mercadolivre.cliente_service.application.infra.entity.ClienteEntity;
 
+import jakarta.persistence.criteria.Predicate;
+
 public class ClienteSpecification {
 
 	public static Specification<ClienteEntity> nomeContains(String nome) {
@@ -30,4 +32,41 @@ public class ClienteSpecification {
 		return Specification.where(nomeContains(nome)).and(emailContains(email)).and(cpfEquals(cpf))
 				.and(telefoneContains(telefone));
 	}
+
+	public static Specification<ClienteEntity> filtrar(
+	        String nome,
+	        String email,
+	        String cpf,
+	        String telefone
+	) {
+	    return (root, query, cb) -> {
+	        Predicate predicate = cb.conjunction();
+
+	        if (nome != null && !nome.isBlank()) {
+	            predicate = cb.and(predicate,
+	                    cb.like(cb.lower(root.get("nomeCompleto")),
+	                            "%" + nome.toLowerCase() + "%"));
+	        }
+
+	        if (email != null && !email.isBlank()) {
+	            predicate = cb.and(predicate,
+	                    cb.like(cb.lower(root.get("email")),
+	                            "%" + email.toLowerCase() + "%"));
+	        }
+
+	        if (cpf != null && !cpf.isBlank()) {
+	            predicate = cb.and(predicate,
+	                    cb.equal(root.get("cpf"), cpf));
+	        }
+
+	        if (telefone != null && !telefone.isBlank()) {
+	            predicate = cb.and(predicate,
+	                    cb.like(root.get("telefone"),
+	                            "%" + telefone + "%"));
+	        }
+
+	        return predicate;
+	    };
+	}
+
 }

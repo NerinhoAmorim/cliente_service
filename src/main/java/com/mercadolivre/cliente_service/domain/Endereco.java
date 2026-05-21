@@ -26,4 +26,13 @@ public class Endereco {
         this.estado = request.getEstado();
         this.cep = request.getCep();
     }
+
+    public Endereco(String rua, String numero, String bairro, String cidade, String estado, String cep) {
+        this.rua = rua;
+        this.numero = numero;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.cep = cep;
+    }
 }

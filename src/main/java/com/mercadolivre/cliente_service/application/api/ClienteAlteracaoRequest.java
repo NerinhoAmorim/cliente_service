@@ -2,6 +2,7 @@ package com.mercadolivre.cliente_service.application.api;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -11,9 +12,8 @@ public class ClienteAlteracaoRequest {
 	private String nomeCompleto;
     @Email(message = "{cliente.email.invalido}")
     private String email;
-    @Size(min = 10, max = 15, message = "{cliente.telefone.tamanho}")
+    @Pattern(regexp = "^[0-9]{10,11}$", message = "{cliente.telefone.invalido}")
     private String telefone;
     @Valid
-    ClienteAlteracaoRequest endereco;
-    {}
+    private EnderecoAlteracaoRequest endereco;
 }

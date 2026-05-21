@@ -160,7 +160,7 @@ public class ClienteApplicationService implements ClienteService {
 	    log.info("[start] ClienteApplicationService - getAllClientes");
 	    try {
             Page<Cliente> page = clienteRepository.findAll(
-                    ClienteSpecification.filtrar(
+                    ClienteSpecification.build(
                             nome,
                             email,
                             cpf,

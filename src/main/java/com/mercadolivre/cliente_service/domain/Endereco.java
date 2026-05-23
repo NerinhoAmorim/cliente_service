@@ -1,14 +1,13 @@
 	package com.mercadolivre.cliente_service.domain;
 
+import com.mercadolivre.cliente_service.application.api.EnderecoAlteracaoRequest;
 import com.mercadolivre.cliente_service.application.api.EnderecoRequest;
 
-import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@Embeddable
 public class Endereco {
 
     private String rua;
@@ -38,5 +37,17 @@ public class Endereco {
         this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
+    }
+
+    public Endereco mergeCom(EnderecoAlteracaoRequest alteracao) {
+        return new Endereco(
+            alteracao.getRua() != null ? alteracao.getRua() : this.rua,
+            alteracao.getNumero() != null ? alteracao.getNumero() : this.numero,
+            alteracao.getComplemento() != null ? alteracao.getComplemento() : this.complemento,
+            alteracao.getBairro() != null ? alteracao.getBairro() : this.bairro,
+            alteracao.getCidade() != null ? alteracao.getCidade() : this.cidade,
+            alteracao.getEstado() != null ? alteracao.getEstado() : this.estado,
+            alteracao.getCep() != null ? alteracao.getCep() : this.cep
+        );
     }
 }

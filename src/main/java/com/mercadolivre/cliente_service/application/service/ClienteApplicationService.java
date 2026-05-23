@@ -127,16 +127,7 @@ public class ClienteApplicationService implements ClienteService {
             }
 
             if (request.getEndereco() != null) {
-                Endereco enderecoAtual = cliente.getEndereco();
-                String rua = request.getEndereco().getRua() != null ? request.getEndereco().getRua() : enderecoAtual.getRua();
-                String numero = request.getEndereco().getNumero() != null ? request.getEndereco().getNumero() : enderecoAtual.getNumero();
-                String complemento = request.getEndereco().getComplemento() != null ? request.getEndereco().getComplemento()
-                        : enderecoAtual.getComplemento();
-                String bairro = request.getEndereco().getBairro() != null ? request.getEndereco().getBairro() : enderecoAtual.getBairro();
-                String cidade = request.getEndereco().getCidade() != null ? request.getEndereco().getCidade() : enderecoAtual.getCidade();
-                String estado = request.getEndereco().getEstado() != null ? request.getEndereco().getEstado() : enderecoAtual.getEstado();
-                String cep = request.getEndereco().getCep() != null ? request.getEndereco().getCep() : enderecoAtual.getCep();
-                cliente.setEndereco(new Endereco(rua, numero, complemento, bairro, cidade, estado, cep));
+                cliente.setEndereco(cliente.getEndereco().mergeCom(request.getEndereco()));
             }
 
             clienteRepository.save(cliente);
@@ -207,8 +198,6 @@ public class ClienteApplicationService implements ClienteService {
 
             return ClienteFiltroPageResponse.from(mapped);
 
-        } catch (ApiException e) {
-            throw e;
         } catch (Exception e) {
             throw ApiException.build(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Erro ao buscar clientes com filtros.", e);

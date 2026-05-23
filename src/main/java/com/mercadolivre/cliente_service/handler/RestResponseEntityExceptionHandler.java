@@ -1,5 +1,8 @@
 package com.mercadolivre.cliente_service.handler;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +40,29 @@ public class RestResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorApiResponse> handleMalformedJson(HttpMessageNotReadableException ex) {
+        log.warn("JSON mal formatado: {}", ex.getMessage());
+        return ResponseEntity.badRequest().body(
+                ErrorApiResponse.builder()
+                        .message("Corpo da requisição mal formatado")
+                        .description("Verifique se o JSON enviado é válido.")
+                        .build());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorApiResponse> handleDataIntegrity(DataIntegrityViolationException ex) {
+        log.error("Violação de integridade de dados: ", ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                ErrorApiResponse.builder()
+                        .message("Violação de integridade de dados")
+                        .description("O recurso já existe ou há conflito com dados existentes.")
+                        .build());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorApiResponse> handleGeneric(Exception ex,
-                                                          HttpServletRequest request) {
+                                                           HttpServletRequest request) {
 
         log.error("Erro inesperado: ", ex);
 

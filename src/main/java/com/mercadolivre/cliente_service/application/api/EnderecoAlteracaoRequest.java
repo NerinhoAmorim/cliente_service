@@ -13,6 +13,9 @@ public class EnderecoAlteracaoRequest {
     @Size(min = 1, max = 20)
     private String numero;
 
+    @Size(max = 120)
+    private String complemento;
+
     @Size(min = 2, max = 80)
     private String bairro;
 

@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
-@Builder
 @Getter
 @NoArgsConstructor
 public class Cliente {
@@ -23,7 +22,7 @@ public class Cliente {
     private String telefone;
     private Endereco endereco;
 
-    // Construtor usado quando vem do banco via ClienteEntity
+    @Builder
     public Cliente(
             UUID idCliente,
             String nomeCompleto,

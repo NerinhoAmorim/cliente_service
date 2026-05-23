@@ -24,10 +24,10 @@ public class ClienteController implements ClienteAPI {
     private final ClienteService clienteService;
 
     @Override
-    public ClienteResponse postcliente(@Valid @RequestBody ClienteRequest request) {
-        log.info("[inicia] ClienteController - postCliente | request={}", request);
+    public ClienteResponse postCliente(@Valid @RequestBody ClienteRequest request) {
+        log.info("[inicia] ClienteController - postCliente");
         ClienteResponse cliente = clienteService.criaCliente(request);
-        log.info("[finaliza] ClienteController - postCliente");
+        log.info("[finaliza] ClienteController - postCliente | id={}", cliente.getIdCliente());
         return cliente;
     }
 
@@ -40,8 +40,8 @@ public class ClienteController implements ClienteAPI {
             Pageable pageable) {
 
         log.info(
-            "[inicia] ClienteController - getAllClientes | nome={}, email={}, cpf={}, telefone={}, pageable={}",
-            nome, email, cpf, telefone, pageable
+            "[inicia] ClienteController - getAllClientes | nome={}, pageable={}",
+            nome, pageable
         );
 
         ClienteFiltroPageResponse response =
@@ -71,7 +71,7 @@ public class ClienteController implements ClienteAPI {
             @PathVariable UUID idCliente,
             @Valid @RequestBody ClienteAlteracaoRequest request
     ) {
-        log.info("[inicia] ClienteController - alteraCliente | idCliente={}, request={}", idCliente, request);
+        log.info("[inicia] ClienteController - alteraCliente | idCliente={}", idCliente);
         clienteService.atualizaParcial(idCliente, request);
         log.info("[finaliza] ClienteController - alteraCliente | idCliente={}", idCliente);
     }

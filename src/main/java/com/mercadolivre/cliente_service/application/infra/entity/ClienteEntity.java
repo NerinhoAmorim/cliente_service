@@ -73,22 +73,4 @@ public class ClienteEntity {
 		this.endereco = cliente.getEndereco();
 	}
 
-	public Cliente toCliente() {
-		return Cliente.builder()
-				.idCliente(this.idCliente)
-				.nomeCompleto(this.nomeCompleto)
-				.email(this.email).cpf(this.cpf)
-				.telefone(this.telefone).build();
-	}
-
-	public static ClienteEntity fromCliente(Cliente cliente) {
-		return ClienteEntity.builder()
-				.idCliente(cliente.getIdCliente())
-				.nomeCompleto(cliente.getNomeCompleto())
-				.email(cliente.getEmail())
-				.cpf(cliente.getCpf())
-				.telefone(cliente.getTelefone())
-				.build();
-	}
-
 }

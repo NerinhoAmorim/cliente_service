@@ -130,11 +130,13 @@ public class ClienteApplicationService implements ClienteService {
                 Endereco enderecoAtual = cliente.getEndereco();
                 String rua = request.getEndereco().getRua() != null ? request.getEndereco().getRua() : enderecoAtual.getRua();
                 String numero = request.getEndereco().getNumero() != null ? request.getEndereco().getNumero() : enderecoAtual.getNumero();
+                String complemento = request.getEndereco().getComplemento() != null ? request.getEndereco().getComplemento()
+                        : enderecoAtual.getComplemento();
                 String bairro = request.getEndereco().getBairro() != null ? request.getEndereco().getBairro() : enderecoAtual.getBairro();
                 String cidade = request.getEndereco().getCidade() != null ? request.getEndereco().getCidade() : enderecoAtual.getCidade();
                 String estado = request.getEndereco().getEstado() != null ? request.getEndereco().getEstado() : enderecoAtual.getEstado();
                 String cep = request.getEndereco().getCep() != null ? request.getEndereco().getCep() : enderecoAtual.getCep();
-                cliente.setEndereco(new Endereco(rua, numero, bairro, cidade, estado, cep));
+                cliente.setEndereco(new Endereco(rua, numero, complemento, bairro, cidade, estado, cep));
             }
 
             clienteRepository.save(cliente);
@@ -167,6 +169,8 @@ public class ClienteApplicationService implements ClienteService {
 
 		boolean semCamposEndereco = (request.getEndereco().getRua() == null || request.getEndereco().getRua().isBlank())
 				&& (request.getEndereco().getNumero() == null || request.getEndereco().getNumero().isBlank())
+				&& (request.getEndereco().getComplemento() == null
+						|| request.getEndereco().getComplemento().isBlank())
 				&& (request.getEndereco().getBairro() == null || request.getEndereco().getBairro().isBlank())
 				&& (request.getEndereco().getCidade() == null || request.getEndereco().getCidade().isBlank())
 				&& (request.getEndereco().getEstado() == null || request.getEndereco().getEstado().isBlank())
@@ -197,7 +201,7 @@ public class ClienteApplicationService implements ClienteService {
                     pageable
             );
 
-            Page<ClienteFiltroResponse> mapped = page.map(ClienteFiltroResponse::from);
+            Page<ClienteFiltroResponse> mapped = page.map(ClienteFiltroResponse::fromDomain);
 
             log.info("[finish] ClienteApplicationService - getAllClientes");
 

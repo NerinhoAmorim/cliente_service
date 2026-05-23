@@ -56,7 +56,7 @@ class ClienteApplicationServiceTest {
                 "maria@email.com",
                 LocalDate.of(1990, 1, 1),
                 "11999998888",
-                new Endereco("Rua A", "100", "Centro", "Sao Paulo", "SP", "01001000")
+                new Endereco("Rua A", "100", "Casa", "Centro", "Sao Paulo", "SP", "01001000")
         );
 
         ClienteAlteracaoRequest request = new ClienteAlteracaoRequest();
@@ -74,6 +74,7 @@ class ClienteApplicationServiceTest {
         Cliente salvo = captor.getValue();
 
         assertEquals("Rua A", salvo.getEndereco().getRua());
+        assertEquals("Casa", salvo.getEndereco().getComplemento());
         assertEquals("Campinas", salvo.getEndereco().getCidade());
         assertEquals("SP", salvo.getEndereco().getEstado());
     }
@@ -88,7 +89,7 @@ class ClienteApplicationServiceTest {
                 "joao@email.com",
                 LocalDate.of(1988, 8, 8),
                 "11911112222",
-                new Endereco("Rua B", "10", "Centro", "Santos", "SP", "11000000")
+                new Endereco("Rua B", "10", "Ap 12", "Centro", "Santos", "SP", "11000000")
         );
         Page<Cliente> page = new PageImpl<>(List.of(cliente), pageable, 1);
 
@@ -174,7 +175,7 @@ class ClienteApplicationServiceTest {
                 request.getEmail(),
                 request.getDataNascimento(),
                 request.getTelefone(),
-                new Endereco("Rua B", "10", "Centro", "Santos", "SP", "11000000")
+                new Endereco("Rua B", "10", "Ap 12", "Centro", "Santos", "SP", "11000000")
         );
 
         when(clienteRepository.existsByCpf("98765432100")).thenReturn(false);

@@ -6,8 +6,8 @@ import java.util.UUID;
 import org.hibernate.annotations.UuidGenerator;
 
 import com.mercadolivre.cliente_service.domain.Cliente;
-import com.mercadolivre.cliente_service.domain.Endereco;
 
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -45,7 +45,14 @@ public class ClienteEntity {
 	private LocalDate dataNascimento;
 
 	@Embedded
-	private Endereco endereco;
+	@AttributeOverride(name = "rua", column = @Column(name = "endereco_rua"))
+	@AttributeOverride(name = "numero", column = @Column(name = "endereco_numero"))
+	@AttributeOverride(name = "complemento", column = @Column(name = "endereco_complemento"))
+	@AttributeOverride(name = "bairro", column = @Column(name = "endereco_bairro"))
+	@AttributeOverride(name = "cidade", column = @Column(name = "endereco_cidade"))
+	@AttributeOverride(name = "estado", column = @Column(name = "endereco_estado"))
+	@AttributeOverride(name = "cep", column = @Column(name = "endereco_cep"))
+	private EnderecoEmbeddable endereco;
 
 	// Construtor de entidade via domínio
 	public ClienteEntity(Cliente cliente) {
@@ -55,13 +62,13 @@ public class ClienteEntity {
 		this.telefone = cliente.getTelefone();
 		this.email = cliente.getEmail();
 		this.dataNascimento = cliente.getDataNascimento();
-		this.endereco = cliente.getEndereco();
+		this.endereco = EnderecoEmbeddable.fromDomain(cliente.getEndereco());
 	}
 
 	// Converte entidade -> domínio
 	public Cliente toDomain() {
 		return new Cliente(this.idCliente, this.nomeCompleto, this.cpf, this.email, this.dataNascimento, this.telefone,
-				this.endereco);
+				this.endereco.toDomain());
 	}
 
 	public void updateFromDomain(Cliente cliente) {
@@ -70,7 +77,7 @@ public class ClienteEntity {
 		this.telefone = cliente.getTelefone();
 		this.email = cliente.getEmail();
 		this.dataNascimento = cliente.getDataNascimento();
-		this.endereco = cliente.getEndereco();
+		this.endereco = EnderecoEmbeddable.fromDomain(cliente.getEndereco());
 	}
 
 }

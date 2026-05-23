@@ -26,8 +26,8 @@ public class ClienteSpecification {
 	}
 
 	public static Specification<ClienteEntity> build(String nome, String email, String cpf, String telefone) {
-
 		return Specification.where(nomeContains(nome)).and(emailContains(email)).and(cpfEquals(cpf))
 				.and(telefoneContains(telefone));
 	}
+
 }

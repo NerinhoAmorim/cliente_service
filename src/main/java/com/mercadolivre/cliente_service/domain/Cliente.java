@@ -5,9 +5,13 @@ import java.util.UUID;
 
 import com.mercadolivre.cliente_service.application.api.ClienteRequest;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 
 @Getter
+@NoArgsConstructor
 public class Cliente {
 
     private UUID idCliente;
@@ -18,7 +22,7 @@ public class Cliente {
     private String telefone;
     private Endereco endereco;
 
-    // Construtor usado quando vem do banco via ClienteEntity
+    @Builder
     public Cliente(
             UUID idCliente,
             String nomeCompleto,
@@ -71,8 +75,17 @@ public class Cliente {
     	if (!telefone.matches("\\d{10,11}")) {
     		throw new IllegalArgumentException("Telefone inválido. Use apenas números com DDD.");
     	}
-    	this.telefone = telefone.trim();
+     this.telefone = telefone.trim();
     }
+
+    public void setEndereco(Endereco endereco) {
+        if (endereco == null) {
+            throw new IllegalArgumentException("Endereco nao pode ser nulo.");
+        }
+        this.endereco = endereco;
+    }
+
+
 
 
 }

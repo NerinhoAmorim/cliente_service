@@ -9,5 +9,7 @@ import com.mercadolivre.cliente_service.application.infra.entity.ClienteEntity;
 
 public interface ClienteSpringDataJPARepository
 extends JpaRepository<ClienteEntity, UUID>, JpaSpecificationExecutor<ClienteEntity> {
+	boolean existsByCpf(String cpf);
+
 }
 

@@ -14,12 +14,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import lombok.Setter;
 @Entity
-@Table(name = "cliente")
+@Table(name = "clientes")
+@Builder
 @Getter
+@Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class ClienteEntity {
 
@@ -58,14 +63,14 @@ public class ClienteEntity {
 		return new Cliente(this.idCliente, this.nomeCompleto, this.cpf, this.email, this.dataNascimento, this.telefone,
 				this.endereco);
 	}
-	
+
 	public void updateFromDomain(Cliente cliente) {
-	    this.nomeCompleto = cliente.getNomeCompleto();
-	    this.cpf = cliente.getCpf();
+		this.nomeCompleto = cliente.getNomeCompleto();
+		this.cpf = cliente.getCpf();
 		this.telefone = cliente.getTelefone();
 		this.email = cliente.getEmail();
 		this.dataNascimento = cliente.getDataNascimento();
-	    this.endereco = cliente.getEndereco();
+		this.endereco = cliente.getEndereco();
 	}
 
 }
